@@ -1,23 +1,34 @@
-baseURL = "https://fable.sh/"
-languageCode = "en-gb"
 title = "fable"
-theme = "hyde-hyde"
+languageCode = "en-gb"
+baseURL = "https://fable.sh/"
+googleAnalytics = "UA-119532346-1"
+tags = ["java", "engineering", "devops", "kubernetes", "terraform", "aws", "cloud"]
 
 [params]
-  description = "A place for an engineers ramblings."
-  author = "Dominic Gunn"
-  
-## Social Accounts
-[params.social]
-  github = "DominicGunn"
-  twitter = "dominic_gunn"
-  instagram = "anoldguard"
-  linkedin = "dominicgunn"
-  email = "dominic@fable.sh"
+  include_rss            = true                          # include RSS <link> tag in <head> and show RSS icon
+  latestpostscount       = 5                             # how many posts to display on the home page
+  author                 = "Dominic Gunn"
+  cachebuster            = true                          # add the current unix timestamp in query string for cache busting css assets
+  dateform               = "Jan 2, 2006"
+  dateformfull           = "Mon Jan 2 2006 15:04:05 MST"
+  description            = "A place for an engineers ramblings."
+  email                  = "dominic@fable.sh"
+  faviconfile            = "img/favicon.ico"
+  github                 = "//github.com/DominicGunn"
+  instagram              = "//instagram.com/anoldguard"
+  lang                   = "en"
+  linkedin               = "//linkedin.com/in/dominicgunn"
+  noshowreadtime         = false                         # if true, don't show "<x> minutes read" in posts
+  selfintro              = "A place for an engineers ramblings."                            # appears in the site header when set to a non-empty string
+  twitter                = "//twitter.com/dominic_gunn"
+  highlightjs            = true
+
+[permalinks]
+  blog  = "blog/:slug/"
 
 ## Main Menu
 [[menu.main]]
-    name = "Posts"
-    weight = 100
-    identifier = "posts"
-    url = "/posts/"
+  name = "Blog"
+  weight = 100
+  identifier = "blog"
+  url = "/blog/"

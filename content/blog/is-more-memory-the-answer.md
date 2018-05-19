@@ -1,7 +1,7 @@
 ---
 author: "Dominic Gunn"
-title: "Is more memory the answer?"
-date: 2018-05-19T12:25:03+01:00
+title: "java.lang.OutOfMemoryError: Is more memory the answer?"
+date: 2018-05-17T12:25:03+01:00
 categories:
   - "java"
 ---
