@@ -23,19 +23,20 @@ jobs:
       # build with Hugo
       - run: HUGO_ENV=production hugo -v -d $HUGO_BUILD_DIR
 
-      # - run:
-      #     name: test our generated HTML files
-      #     command: |
-      #       htmlproofer $HUGO_BUILD_DIR --allow-hash-href --check-html \
-      #       --empty-alt-ignore --disable-external
-
-      # `deploy` step: identical to a `run` step, but uses only one container:
-      # https://circleci.com/docs/2.0/configuration-reference/#deploy
       - deploy:
           name: deploy to AWS
           command: |
             if [ "${CIRCLE_BRANCH}" = "master" ]; then
               aws s3 sync $HUGO_BUILD_DIR s3://fable.sh --delete
+            else
+              echo "Not master branch, dry run only"
+            fi
+
+      - deploy:
+          name: bust cloudfront cache
+          command: |
+            if [ "${CIRCLE_BRANCH}" = "master" ]; then
+              aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
             else
               echo "Not master branch, dry run only"
             fi
