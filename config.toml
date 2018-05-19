@@ -1,0 +1,23 @@
+baseURL = "https://fable.sh/"
+languageCode = "en-gb"
+title = "fable"
+theme = "hyde-hyde"
+
+[params]
+  description = "A place for an engineers ramblings."
+  author = "Dominic Gunn"
+  
+## Social Accounts
+[params.social]
+  github = "DominicGunn"
+  twitter = "dominic_gunn"
+  instagram = "anoldguard"
+  linkedin = "dominicgunn"
+  email = "dominic@fable.sh"
+
+## Main Menu
+[[menu.main]]
+    name = "Posts"
+    weight = 100
+    identifier = "posts"
+    url = "/posts/"
