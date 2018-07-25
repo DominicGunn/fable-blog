@@ -11,18 +11,20 @@ categories:
 
 At Turnitin we're slowly beginning to dip our toes into the world of Kubernetes, I've wrote a little about that before but as time has progressed we've began to ship more and more software onto our clusters and slowly transition little pieces of traffic over to our new infrastructure.
 
-This experience begins on an otherwise calm and ordinary afternoon but quickly escalated to completely unexpected and surprise experience that deserved its own blog.
+This experience begins on an otherwise calm and ordinary afternoon but quickly escalated to a completely unexpected and surprise experience that deserved its own blog.
 
 ## The Incident
 
-We have a variety of clusters at Turnitin serving different regions but all currently backed by infrastructure in AWS and provisioned by [kube-aws](https://github.com/kubernetes-incubator/kube-aws), as you might expect we also have a large number of alarms to help monitor the heal of our clusters.
+We have a variety of clusters at Turnitin serving different regions but all currently backed by infrastructure in AWS and provisioned by [kube-aws](https://github.com/kubernetes-incubator/kube-aws), as you might expect we also have a large number of alarms to help monitor the health of our clusters.
 
-During the spin up of each of our clusters we had configured the clusters `cluster.yaml` to setup private ELB for the cluster API, provided the appropriate subnets, CIDRs and hosted zone and then let [kube-aws](https://github.com/kubernetes-incubator/kube-aws) do it's thing, nothing was a miss, until this happened
+During the spin up of each of our clusters we had configured the clusters `cluster.yaml` to setup a private ELB for the cluster API, provided the appropriate subnets, CIDRs and hosted zone and then let [kube-aws](https://github.com/kubernetes-incubator/kube-aws) do it's thing.
+
+Months passed and nothing was a miss, until this happened
 
 ![Menace ELB Outage Graph](/image/menace-elb-outage.png)
 ![Menace ELB Outage Alert Response](/image/menace-elb-outage-response.png)
 
-The outage lasted little over 15 minutes, with minor service disruption lingering a little while longer, so what happened? Did one of our operation engineers touch the cluster? Had a deployment gone really wrong? Where had all of our pods gone?
+The outage lasted just over 15 minutes, with minor service disruption lingering a little while longer, so what happened? Did one of our operation engineers touch the cluster? Had a deployment gone really wrong? Where had all of our pods gone?
 
 ## Investigation
 
@@ -53,3 +55,5 @@ Suddenly things started to fall into place, one of the dynamic IPs assigned to t
 We are not the only company to fall foul of this particular issue, infact you can find more indepth discussion regarding it on [this](https://github.com/kubernetes-incubator/kube-aws/issues/598) Github issue.
 
 Actions to help prevent this occuring again have now began to be put in place, the cause of the outage is one that we had not originally anticipated so had not guarded against but this felt like an experience that we could and should share. 
+
+As time goes on, I hope that I have less of these to write about despite that being saddening given how great these experiences are to share.
