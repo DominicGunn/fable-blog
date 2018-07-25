@@ -19,7 +19,7 @@ We have a variety of clusters at Turnitin serving different regions but all curr
 
 During the spin up of each of our clusters we had configured the clusters `cluster.yaml` to setup a private ELB for the cluster API, provided the appropriate subnets, CIDRs and hosted zone and then let [kube-aws](https://github.com/kubernetes-incubator/kube-aws) do it's thing.
 
-Months passed and nothing was a miss, until this happened
+Months passed and nothing was a miss on any of our clusters until this happened
 
 ![Menace ELB Outage Graph](/image/menace-elb-outage.png)
 ![Menace ELB Outage Alert Response](/image/menace-elb-outage-response.png)
@@ -28,9 +28,9 @@ The outage lasted just over 15 minutes, with minor service disruption lingering 
 
 ## Investigation
 
-Initially we were a little lost, we hadn't really seen this type of outage occur before so checked the health of our nodes, around half were reporting a `NotReady` state. 
+Initially we were a little lost, we hadn't really seen this type of outage occur before so checked the health of our nodes, around half were reporting a `NotReady` state. Worryingly this was also one of our quieter clusters especially so given the time of the incident, it is responsible for traffic on a continent where users were still sleeping.
 
-Investigating a little deeper showed that Kubelet on those nodes had stopped reporting, I've trimmed a little bit of data here to keep things concise.
+Investigating a little showed that Kubelet on those nodes had stopped reporting, I've trimmed a little bit of data here to keep things concise.
 
 ```bash
 ➜  $ kubectl describe node a-problem-node.internal
@@ -44,9 +44,13 @@ Conditions:
   Ready            Unknown   Kubelet stopped posting node status.
 ```
 
-This was weird, why had around half of our nodes suddenly stopped working? During the investigation one of our engineers stumbled upon this log.
+This was weird, why had around half of our nodes suddenly stopped reporting? During the investigation one of our engineers stumbled upon this log:
 
 > streamwatcher.go:109] Unable to decode an event from the watch stream: read tcp 10.69.12.245:50538->10.69.14.11:443: read: no route to host
+
+We checked the health of one of the `NotReady` nodes and sure enough noticed a huge networking spike, this was not normal behaviour.
+
+![Menace ELB Outage EC2 Network Monitoring](/image/menace-elb-outage-ec2.png)
 
 Suddenly things started to fall into place, one of the dynamic IPs assigned to the ELB providing access to cluster api had changed, and the change did not propagate through to our Kubelets.
 
