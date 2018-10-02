@@ -9,7 +9,6 @@ categories:
 
 ![Read Replica Architecture Diagram](/image/rds_read_replica.png)
 
-
 At [Turnitin](https://turnitin.com) we deal with quite a lot of traffic, the vast majority of database operations are reads. Splitting our databases and creating read replicas (slaves) is necessary in order to make sure we are not hindering write operations to the master database, but what good is managing these extra replicas if our applications cannot read from them?
 
 Spring Boot makes it relatively easy for us to split these operations, you can find an example project using this code [here](https://github.com/DominicGunn/fable-spring-read-replica), but we'll talk through the most important parts of it in this post.
