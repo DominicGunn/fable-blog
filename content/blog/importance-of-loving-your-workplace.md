@@ -1,7 +1,6 @@
 ---
 title: "Importance of enjoying your workplace"
 date: 2018-12-14T17:03:34Z
-draft: true
 categories:
   - "career"
   - "turnitin"
