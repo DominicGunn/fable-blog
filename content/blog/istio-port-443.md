@@ -12,7 +12,9 @@ categories:
 
 It's been a while since I've written one of these, but this issue irked me and I felt I had to write something. [Turnitin](https://turnitin.com) is a pretty early adopter of some new technologies, Kubernetes and Istio haven't been around all that long but in the companies shift towards the cloud they're at the forefront of our charge. Bleeding edge isn't always fantastic.
 
-I like to think that we've got a pretty fleshed out CI/CD pipeline that enables our engineering teams to get their code from their laptop to our regional Kubernetes clusters safely, quickly and importantly in a way that fits within the teams own SDLC. To support this, we have a set of tools that allow engineers to provide us with nothing more than a set of `value.yaml` files that we dump into a highly configurable Helm chart, we got the idea from [TicketMaster](https://ticketmaster.com), they give a great talk on it [here](https://www.youtube.com/watch?v=HzJ9ycX1h0c). Our "plug and play" type setup is very similar.
+I like to think that we've got a pretty fleshed out CI/CD pipeline that enables our engineering teams to get their code from their laptop to our regional Kubernetes clusters safely, quickly and importantly in a way that fits within the teams own SDLC. 
+
+To support this, we have a set of tools that allow engineers to provide us with nothing more than a set of `value.yaml` files that we dump into a highly configurable Helm chart, we got the idea from [TicketMaster](https://ticketmaster.com), they give a great talk on it [here](https://www.youtube.com/watch?v=HzJ9ycX1h0c). Our "plug and play" type setup is very similar.
 
 ## Istio!
 
@@ -30,11 +32,11 @@ externalRouting:
 
 ### Read the documentation
 
-Did you know that Istio has some very strict rules on how ports on services [should be named?](https://istio.io/docs/ops/configuration/traffic-management/protocol-selection/). We did, we even wrote code to guard against deploying a service with a port name that Istio wouldn't accept. It's super simple and looks like this.
+Did you know that Istio has some very strict rules on how ports on services [should be named](https://istio.io/docs/ops/configuration/traffic-management/protocol-selection/)? We did, we even wrote code to guard against deploying a service with a port name that Istio wouldn't accept. It's super simple and looks like this.
 
 ```go
 govalidator.TagMap["portName"] = govalidator.Validator(func(str string) bool {
-    for _, prefix := range []string{"grpc", "grpc-web", "http", "http2", .... } {
+    for _, prefix := range []string{"grpc", "grpc-web", "http", .... } {
         if strings.HasPrefix(str, prefix) {
             return true
         }
@@ -45,13 +47,13 @@ govalidator.TagMap["portName"] = govalidator.Validator(func(str string) bool {
 
 There, nice and safe.
 
-### [SSL: WRONG_VERSION_NUMBER] (_ssl.c:852)
+### SSL: WRONG_VERSION_NUMBER
 
 Uh oh. Suddenly everything in the cluster is dead. We can't make any calls to SSL/TLS services over HTTPS anywhere, to anything internal or external. All calls are failing.
 
 ```bash
 $ curl https://www.google.com
-curl: (35) error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol.
+error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol.
 ```
 
 ### What happened? 
