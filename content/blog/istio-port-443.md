@@ -73,7 +73,7 @@ It turns out, if you have anything listening on port 443 that doesn't have a por
 
 ### What next?
 
-So how did we protect against this? Remember engineering teams give us all of this information to template for them. We write more code.
+So how did we protect against this? Remember engineering teams give us all of this information to template for them. We wrote more code.
 
 ```go
 if p.Port == 443 {
